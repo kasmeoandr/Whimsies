@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House of Whimsies</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0e68c;
+            font-family: 'Comic Sans MS', cursive;
+            margin: 0;
+        }
+        #game-container {
+            text-align: center;
+            background: #fff8dc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+        }
+        img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <img src="house.png" alt="House of Whimsies">
+        <div id="objects">
+            <button onclick="interact('mirror')"><img src="mirror.png" alt="Mirror"></button>
+            <button onclick="interact('clock')"><img src="clock.png" alt="Clock"></button>
+            <button onclick="interact('rug')"><img src="rug.png" alt="Rug"></button>
+        </div>
+        <div id="navigation">
+            <button onclick="move('hallway')"><img src="door.png" alt="Door to Hallway"></button>
+        </div>
+    </div>
+
+    <script>
+        let currentRoom = 'room';
+
+        function interact(item) {
+            let feedback = document.createElement("img");
+            feedback.style.width = "100px";
+            feedback.style.height = "100px";
+
+            if (currentRoom === 'room') {
+                switch(item) {
+                    case 'mirror':
+                        feedback.src = "mirror_react.png";
+                        break;
+                    case 'clock':
+                        feedback.src = "clock_react.png";
+                        break;
+                    case 'rug':
+                        feedback.src = "rug_react.png";
+                        break;
+                }
+            } else if (currentRoom === 'hallway') {
+                switch(item) {
+                    case 'painting':
+                        feedback.src = "painting_react.png";
+                        break;
+                    case 'umbrella':
+                        feedback.src = "umbrella_react.png";
+                        break;
+                }
+            }
+
+            document.body.appendChild(feedback);
+            setTimeout(() => document.body.removeChild(feedback), 2000);
+        }
+
+        function move(location) {
+            let objects = document.getElementById('objects');
+            let navigation = document.getElementById('navigation');
+
+            objects.innerHTML = ''; // Clear previous objects
+
+            if (location === 'hallway') {
+                currentRoom = 'hallway';
+                objects.innerHTML = `
+                    <button onclick="interact('painting')"><img src="painting.png" alt="Painting"></button>
+                    <button onclick="interact('umbrella')"><img src="umbrella.png" alt="Umbrella"></button>
+                `;
+                navigation.innerHTML = `
+                    <button onclick="move('room')"><img src="back.png" alt="Back to Room"></button>
+                `;
+            } else if (location === 'room') {
+                currentRoom = 'room';
+                objects.innerHTML = `
+                    <button onclick="interact('mirror')"><img src="mirror.png" alt="Mirror"></button>
+                    <button onclick="interact('clock')"><img src="clock.png" alt="Clock"></button>
+                    <button onclick="interact('rug')"><img src="rug.png" alt="Rug"></button>
+                `;
+                navigation.innerHTML = `
+                    <button onclick="move('hallway')"><img src="door.png" alt="Door to Hallway"></button>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
